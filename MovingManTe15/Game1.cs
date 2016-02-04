@@ -19,7 +19,7 @@ namespace MovingManTe15
 
         int speed = 5;
 //        Vector2 position, velocity;      
-
+  
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
