@@ -12,7 +12,9 @@ namespace MovingManTe15
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        MovingObject player;
+        MovingObject player, ghost;
+
+        bool colliding = false;
 
 //        Texture2D sprite; //Deklarerar ett objekt av typ Texture2D.
                           //OBS: Skapar inte objektet.
@@ -38,8 +40,12 @@ namespace MovingManTe15
             player.position = new Vector2(50, 200);
             player.velocity = new Vector2(1, 0.5f);
 
-//            position = new Vector2(50, 200); Behövs inte eftersom player har en "inbyggd" position
-//            velocity = new Vector2(1, 0.5f);
+            ghost = new MovingObject();
+            ghost.position = new Vector2(50, 200);
+            ghost.velocity = new Vector2(1, 0.5f);
+
+            //            position = new Vector2(50, 200); Behövs inte eftersom player har en "inbyggd" position
+            //            velocity = new Vector2(1, 0.5f);
 
             // TODO: Add your initialization logic here
 
@@ -53,7 +59,9 @@ namespace MovingManTe15
         protected override void LoadContent()
         {
             player.sprite = Content.Load<Texture2D>("giana");
-//            sprite = Content.Load<Texture2D>("giana");
+            ghost.sprite = Content.Load<Texture2D>("giana");
+
+            //            sprite = Content.Load<Texture2D>("giana");
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -101,6 +109,15 @@ namespace MovingManTe15
             //            position.Y += velocity.Y;
 
             player.Update();
+            ghost.Update();
+
+            if (player.hitbox.Intersects(ghost.hitbox) == true)
+                colliding = true;
+
+            else
+                colliding = false;
+
+
 
             //player.position += player.velocity;
 
@@ -118,10 +135,15 @@ namespace MovingManTe15
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            if(colliding==false)
+                GraphicsDevice.Clear(Color.CornflowerBlue);
+            else
+                GraphicsDevice.Clear(Color.DarkRed);
 
             spriteBatch.Begin();
             spriteBatch.Draw(player.sprite, player.position, Color.White);
+            spriteBatch.Draw(ghost.sprite, ghost.position, Color.White);
+
             spriteBatch.End();
 
             // TODO: Add your drawing code here
